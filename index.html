@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="manifest" href="./manifest.json" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="A local video player: play all the videos saved on your device, directly from your browser. No upload required.">
+    <title>VideoPlay</title>
+  </head>
+  <body>
+    <div id="app"></div>
+    <script>
+      if (typeof crypto.randomUUID === "undefined") crypto.randomUUID = () => Math.random().toString();  
+      if (window.location.hash && window.location.hash !== "#restoreTheme") history.replaceState("", "", "./");
+      window.videoPlayerVersion = "1.0.0";
+      (async () => {
+        const result = await navigator.serviceWorker.register('./service-worker.js');
+        if (navigator.onLine) await result.update();
+      })();
+      fetch("./updatecode", { cache: "no-store" }).then((res) => res.text().then((text) => { if (text.replace("\n", "") !== window.videoPlayerVersion) if (confirm(`There's a new version of VideoPlay. Do you want to update? [${window.videoPlayerVersion} --> ${text.replace("\n", "")}]`)) { caches.delete("videoplayer-cache"); location.reload(true); } }).catch((e) => { console.error(e) })).catch((e) => console.error(e)); // Check if the application code is the same as the current application version and, if not, ask the user to update
+    </script>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

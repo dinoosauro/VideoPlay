@@ -1,0 +1,187 @@
+:root {
+  --background: #313131;
+  --text: #fafafa;
+  --font: "Work Sans", sans-serif;
+  --cardtransparent: #51515155;
+  --card: #515151;
+  --secondcard: #818181;
+  --accent: #468085;
+}
+
+body {
+  padding: 10px;
+  background-color: var(--background);
+  color: var(--text);
+  font-family: var(--font);
+}
+
+.flex {
+  display: flex;
+}
+.hcenter {
+  align-items: center;
+}
+.gap {
+  gap: 10px;
+}
+.wcenter {
+  justify-content: center;
+}
+
+.emptyButton {
+  appearance: none;
+  background-color: transparent;
+  border: 0px;
+  display: block;
+  color: var(--text);
+  transition: border 0.2s ease-in-out;
+  height: 100%;
+  width: fit-content;
+  padding: 5px;
+}
+
+
+  .videoContainer:hover > .videoControls:not([data-disable]), .videoHover:hover .videoControls:not([data-disable]) {
+    pointer-events: all;
+    opacity: 1;
+  }
+  .videoContainer:hover > .videoControls:not([data-disable]) > *, .videoHover:hover .videoControls:not([data-disable]) > * {
+    opacity: 1;
+  }
+
+  .videoControls > *, .videoControls {
+    opacity: 0;
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .dropdownItem {
+    z-index: 2;
+    backdrop-filter: blur(16px) brightness(60%);
+    padding: 15px;
+    border-radius: 12px;
+    overflow: auto;
+  }
+
+  .maxWidth, button, input:not([type=checkbox]), select {
+    width: 100%;
+    width: -webkit-fill-available;
+    width: -moz-available;
+  }
+
+  .videoContainer:fullscreen {
+    background-color: var(--background);
+  }
+
+  button, input:not([type=checkbox]):not([type=range]), select {
+    padding: 10px;
+    border-radius: 12px;
+    border: 1px solid var(--text);
+    color: var(--text);
+    font-family: var(--font);
+  }
+
+  button:not(.emptyButton), input:not([type=checkbox]):not([type=range]), select {
+    background-color: var(--cardtransparent);
+  }
+
+  .circularButton {
+    width: fit-content;
+    border-radius: 50%;
+    backdrop-filter: blur(8px) brightness(50%);
+  }
+
+  input[type=checkbox] {
+    appearance: none;
+    width: 60px;
+    min-width: 60px;
+    height: 22px;
+    background-color: var(--card);
+    border-radius: 12px;
+    border: 1px solid var(--text);
+    position: relative;
+    transition: background-color 0.2s ease-in-out;
+  }
+  input[type=checkbox]::before {
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    width: 14px;
+    height: 14px;
+    background-color: var(--text);
+    content: "";
+    border-radius: 50%;
+    transition: left 0.2s ease-in-out;
+  }
+  input[type=checkbox]:checked {
+    background-color: var(--accent);
+  }
+  input[type=checkbox]:checked::before {
+    left: 41px;
+  }
+
+  input[type=range] {
+  --currentsize: 1px;
+  background-color: var(--secondcard);
+  appearance: none;
+  border-radius: 12px;
+  height: 15px;
+  padding: 0px;
+  margin: 0px;
+  transition: 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+  display: block;
+}
+.slider::before {
+  appearance: none;
+  position: absolute;
+  height: 100%;
+  width: var(--currentsize);
+  background-color: var(--text);
+  content: "";
+  top: 0px;
+  left: 0px;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  interpolate-size: allow-keywords;
+  z-index: 1;
+  pointer-events: none;
+}
+.slider {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  display: block;
+  border-radius: 12px;
+}
+input[type=range]:hover {
+  height: 25px;
+}
+.slider:has(input[type=range]:hover)::before {
+    background-color: var(--text);
+}
+
+input[type=range]::-webkit-slider-thumb {
+  appearance: none;
+}
+
+input[type=range]::-moz-range-thumb {
+  appearance: none;
+  opacity: 0;
+}
+
+button:hover, input:hover {
+  cursor: pointer;
+}
+
+    .card {
+        background-color: var(--card);
+        padding: 10px;
+        border-radius: 12px;
+    }
+
+
+    input[type=color] {
+      height: 40px;
+      padding: 5px !important;
+    }
