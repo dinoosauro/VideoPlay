@@ -53,6 +53,29 @@
         </Card>
     </Card><br>
     <Card secondCard={true}>
+        <h4>{lang("Control panel settings")}:</h4>
+        <p>{lang("Here you can change the behavior of the next/previous buttons you can click from your OS's control panel.")}</p>
+        <label class="flex hcenter gap">
+            {lang("When the Next/Previous button is clicked")}: <select bind:value={Settings.mediaSession.nextButtonBehavior}>
+                <option value={"skip"}>{lang("Go to the next/previous video")}</option>
+                <option value={"seek"}>{lang("Go forward/backwards in the video")}</option>
+            </select>
+        </label><br>
+        <label class="flex hcenter gap">
+            {lang("When the Forwards/Backwards button is clicked")}: <select bind:value={Settings.mediaSession.seekButtonBehavior}>
+                <option value={"skip"}>{lang("Go to the next/previous video")}</option>
+                <option value={"seek"}>{lang("Go forward/backwards in the video")}</option>
+            </select>
+        </label><br>
+        <label class="flex hcenter gap">
+            {lang("When going backwards/forwards, skip these seconds (put a negative number to use the default value)")}:
+            <input type="number" style="background-color: var(--card);" bind:value={Settings.mediaSession.customOffset}>
+        </label><br>
+        <label class="flex hcenter gap">
+            <input type="checkbox" bind:checked={Settings.metadata.autoReadMetadata}>{lang("Read video metadata immediately after they have been uploaded. If disabled, video information in the Control Center might be incomplete")}.
+        </label>
+    </Card><br>
+    <Card secondCard={true}>
         <h4>{lang("Application styling")}:</h4>
         <p>{lang("Here you can customize the styling of VideoPlay")}.</p><br>
         <div class="flex hcenter wrap gap">

@@ -66,7 +66,15 @@ const availableTranslations = new Map<string, TranslationObj>([
     ["All metadata", {it: "Tutti i metadati"}],
     ["Open source licenses", {it: "Licenze open source"}],
     ["Here you can see the license of all the open source libraries used by VideoPlay", {it: "Qui puoi vedere la licenza di tutte le librerie open source utilizzate da VideoPlay"}],
-    ["Loop the current video", {it: "Imposta il video corrente in loop"}]
+    ["Loop the current video", {it: "Imposta il video corrente in loop"}],
+    ["Control panel settings", {it: "Impostazioni del centro di controllo"}],
+    ["Here you can change the behavior of the next/previous buttons you can click from your OS's control panel.", {it: "Qui puoi cambiare il funzionamento dei pulsanti per andare avanti/indietro che puoi cliccare nel pannello di controllo del tuo sistema operativo"}],
+    ["When the Next/Previous button is clicked", {it: "Quando il pulsante Prossimo/Precedente è cliccato"}],
+    ["Go to the next/previous video", {it: "Vai al prossimo/precedente video"}],
+    ["Go forward/backwards in the video", {it: "Vai avanti/indietro nel video"}],
+    ["When the Forwards/Backwards button is clicked", {it: "Quando il pulsante Avanti/Indietro è cliccato"}],
+    ["When going backwards/forwards, skip these seconds (put a negative number to use the default value)", {it: "Quando si va avanti/indietro, salta questi secondi (inserire un numero negativo per usare il valore di default)"}],
+    ["Read video metadata immediately after they have been uploaded. If disabled, video information in the Control Center might be incomplete", {it: "Leggi i metadati del video subito dopo che sono stati caricati. Se disabilitato, le informazioni sul video nel pannello di controllo potrebbero essere incomplete"}]
 ])
 
 

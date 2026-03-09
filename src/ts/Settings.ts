@@ -6,6 +6,14 @@ let Settings = {
     },
     cssColors: {} as {[key: string]: string},
     language: navigator.language.substring(0, 2) as string | undefined,
+    metadata: {
+        autoReadMetadata: true
+    },
+    mediaSession: {
+        customOffset: -1,
+        nextButtonBehavior: "skip",
+        seekButtonBehavior: "seek"
+    }
 }
 
 const json = JSON.parse(localStorage.getItem("VideoPlayer-Settings") ?? "{}");

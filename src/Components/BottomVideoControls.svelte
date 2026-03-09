@@ -1,10 +1,12 @@
 <script lang="ts">
+    import ChangeVideo from "../ts/ChangeVideo";
     import ConvertSecondsToTimestamp from "../ts/ConvertSecondsToTimestamp";
     import { getObjectUrl } from "../ts/IconsManager";
     import inputRangeStyle from "../ts/InputTypeRangeStyle";
     import type { PopupScalingInfo, VideoStorage } from "../ts/Interfaces";
     import { lang } from "../ts/Lang";
     import RemoveCaptionTrack from "../ts/RemoveCaptionTrack";
+    import UpdateMediaSessionMetadata from "../ts/UpdateMediaSessionMetadata";
     import DropdownButtonShow from "./DropdownButtonShow.svelte";
     import PlaybackRate from "./PlaybackRate.svelte";
     import Volume from "./Volume.svelte";
@@ -16,10 +18,7 @@
         }
         if (videoList.length === 1) return;
         videoList.push(videoList.shift() as VideoStorage); // Let's add the video that has been played at the end of the queue
-        URL.revokeObjectURL(videoObj.src);
-        videoObj.src = URL.createObjectURL(videoList[0].file);
-        videoObj.currentTime = 0;
-        RemoveCaptionTrack(videoObj);
+        ChangeVideo({videoObj, file: videoList[0]});
     }
     let playPauseBtn: HTMLImageElement;
     const {
@@ -43,6 +42,7 @@
             videoObj.addEventListener("leavepictureinpicture", () => {
                 pictureInPictureIcon.src = getObjectUrl("pictureinpictureenter");
             });
+            let isIconInGeneration = false;
             videoObj.addEventListener("timeupdate", () => {
                 secondsStart.textContent = ConvertSecondsToTimestamp(videoObj.currentTime);
                 secondsEnd.textContent = ConvertSecondsToTimestamp(videoObj.duration);
@@ -50,6 +50,19 @@
                 if (!blockProgressUpdate) {
                     range.value = videoObj.currentTime.toString();
                     range.dispatchEvent(new Event("change"));
+                }
+                if ((navigator.mediaSession.metadata?.artwork?.length ?? 0) === 0 && !isIconInGeneration) { // Let's add as a thumbnail for the MediaSession object the first frame
+                    isIconInGeneration = true; // Let's avoid creating multiple artworks at the same time
+                    const canvas = Object.assign(document.createElement("canvas"), {
+                        width: videoObj.videoWidth,
+                        height: videoObj.videoHeight
+                    });
+                    const ctx = canvas.getContext("2d");
+                    ctx?.drawImage(videoObj, 0, 0);
+                    canvas.toBlob((blob) => {
+                        isIconInGeneration = false;
+                        if (blob) UpdateMediaSessionMetadata(undefined, URL.createObjectURL(blob));
+                    }, "image/jpeg", 0.5)
                 }
             })
         }
@@ -72,7 +85,7 @@
         <span bind:this={secondsStart}>0:00</span>
         <span bind:this={secondsEnd} style="float: right;">0:00</span>
     </div>
-    <div class="flex hcenter gap">
+    <div class="flex hcenter gap" style="overflow: auto;">
         <div class="flex hcenter gap">
         <DropdownButtonShow placeholderIcon="topspeed" iconAlt={lang("Change playback rate")}>
             {#snippet children(scaleInfo: PopupScalingInfo)}
@@ -99,10 +112,7 @@
                     }
                     // We'll play the previous video, that'll be the last that has been added by the queue
                     videoList.unshift(videoList.pop() as VideoStorage);
-                    URL.revokeObjectURL(videoObj.src);
-                    videoObj.src = URL.createObjectURL(videoList[0].file);
-                    videoObj.currentTime = 0;
-                    RemoveCaptionTrack(videoObj);
+                    ChangeVideo({videoObj, file: videoList[0]});
                 }}
             >
                 <img src={getObjectUrl("prev")} alt={lang("Previous video")} />

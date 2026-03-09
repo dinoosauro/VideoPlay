@@ -8,6 +8,7 @@
     import Card from "./SmallerComponents/Card.svelte";
     import RemoveCaptionTrack from "../ts/RemoveCaptionTrack";
     import { lang } from "../ts/Lang";
+    import ChangeVideo from "../ts/ChangeVideo";
 
     let {scaleInfo, video, videoInfo}: {
         /**
@@ -97,10 +98,7 @@
             <button class="maxWidth flex hcenter gap emptyButton" style="display: flex;" onclick={() => {
                 // Let's play the clicked video
                 videoInfo.push(...videoInfo.splice(0, i));
-                URL.revokeObjectURL(video.src);
-                video.src = URL.createObjectURL(videoInfo[0].file);
-                video.currentTime = 0;
-                RemoveCaptionTrack(video);
+                ChangeVideo({videoObj: video, file: videoInfo[0]});
             }}>
                 {#if (possibleVideo.metadata?.common.picture?.length ?? 0) !== 0}
                     <img src={addObjectUrlToListToDelete(URL.createObjectURL(new Blob([(possibleVideo.metadata?.common.picture as IPicture[])[0].data as Uint8Array<ArrayBuffer>])))} alt="Album art">
@@ -121,10 +119,7 @@
             </button>
             <button title={lang("Delete video from the queue")} class="emptyButton flex hcenter gap" onclick={() => {
                 if (i === 0 && videoInfo.length > 1) {
-                    URL.revokeObjectURL(video.src);
-                    video.src = URL.createObjectURL(videoInfo[1].file);
-                    video.currentTime = 0;
-                    RemoveCaptionTrack(video);
+                    ChangeVideo({videoObj: video, file: videoInfo[1]});
                 }
                 videoInfo.splice(i, 1);
             }}>

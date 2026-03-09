@@ -4,6 +4,10 @@
     import type { VideoStorage } from "./ts/Interfaces";
     import "./Components/Settings.svelte";
     import { lang } from "./ts/Lang";
+    import type { IAudioMetadata } from "music-metadata";
+    import Settings from "./ts/Settings";
+    import UpdateMediaSessionMetadata from "./ts/UpdateMediaSessionMetadata";
+    import MediaSessionControls from "./ts/MediaSessionControls";
   let videoList: VideoStorage[] = $state([]);
   let videoUrl = "";
   let video: HTMLVideoElement | undefined = $state(undefined);
@@ -26,10 +30,24 @@
     type: "file",
     multiple: true,
     accept: "video/*",
-    onchange: () => {
+    onchange: async () => {
       if (input.files) {
         videoUrl = URL.createObjectURL(input.files[0]);
-        videoList.push(...Array.from(input.files).map(i => {return {file: i, id: crypto.randomUUID()}}));
+        for (const file of input.files) {
+          let metadata: IAudioMetadata | undefined;
+          if (Settings.metadata.autoReadMetadata) {
+            try {
+              const metadataLib = await import("music-metadata");
+              metadata = await metadataLib.parseBlob(file);
+            } catch(ex) {
+              console.warn(ex);
+            }
+          }
+          videoList.push({file, id: crypto.randomUUID(), metadata});
+          if (videoList.length === 1) {
+            UpdateMediaSessionMetadata(videoList[0]);
+          }
+        }
       }
     }
   });
@@ -40,7 +58,7 @@
   <!-- svelte-ignore a11y_media_has_caption -->
   <video playsinline onclick={() => {
     videoControls.getAttribute("data-disable") ? videoControls.removeAttribute("data-disable") : videoControls.setAttribute("data-disable", "true");
-  }} bind:this={video} autoplay src={videoUrl}></video>
+  }} bind:this={video} use:MediaSessionControls={videoList} autoplay src={videoUrl}></video>
   <!-- svelte-ignore a11y_click_events_have_key_events -->
   <div class="videoControls" bind:this={videoControls} role="button" tabindex="-1" onclick={(e) => {
     if ((e.target as HTMLElement).nodeName === "IMG" || (e.target as HTMLElement).nodeName === "BUTTON" || (e.target as HTMLElement).nodeName === "INPUT") return;
